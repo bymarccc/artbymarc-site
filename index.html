@@ -168,9 +168,9 @@ a:hover .art-hover img { transform: scale(1.025); }
 @media (min-width: 1100px) { .grid { grid-template-columns: repeat(3, 1fr); } }
 .card { text-align: center; }
 .card .art-hover { margin-inline: auto; }
-.card .dim.dim-in { margin-top: 3px; font-size: 9.9px; }
+.card .dim .dim-in { font-size: .9em; }
 .card .dim { display: block; margin-top: 8px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted, #6f6a62); font-weight: 400; }
-.card .t { font-family: var(--serif); font-size: clamp(22px, 2vw, 24px); line-height: 1.15; margin-top: 20px; display: block; }
+.card .t { font-family: var(--serif); font-size: clamp(17px, 1.5vw, 19px); line-height: 1.15; margin-top: 20px; display: block; }
 
 .gallery-band { background: var(--ivory); padding-bottom: clamp(96px, 10vw, 144px); }
 .gallery-band img { width: 100%; }
@@ -356,7 +356,7 @@ const realEq = w => {
 };
 const REAL_MAX = Math.max(...ALL.map(realEq));
 const realPct = w => { const e = realEq(w); return e ? Math.max(32, Math.min(100, Math.round(e / REAL_MAX * 100))) : 100; };
-const card = (w, i) => `<a class="card reveal" style="--d:${(i % 3) * 90}ms" href="#work-${w.slug}"><div class="art-hover" style="width:${realPct(w)}%">${img(w, "", true)}</div><span class="t"><span class="link-line">${esc(w.title)}</span></span>${w.dims ? `<span class="dim">${esc(w.dims.cm)}</span>${w.dims.in ? `<span class="dim dim-in">${esc(w.dims.in)}</span>` : ""}` : ""}</a>`;
+const card = (w, i) => `<a class="card reveal" style="--d:${(i % 3) * 90}ms" href="#work-${w.slug}"><div class="art-hover" style="width:${realPct(w)}%">${img(w, "", true)}</div><span class="t"><span class="link-line">${esc(w.title)}</span></span>${w.dims ? `<span class="dim">${esc(w.dims.cm)}${w.dims.in ? ` <span class="dim-in">/ ${esc(w.dims.in)}</span>` : ""}</span>` : ""}</a>`;
 
 function viewHome() {
   const h = DATA.home, hero = byId[h.heroArtwork] || W[0], red = byId[h.redArtwork] || hero;
