@@ -115,7 +115,7 @@ button { font: inherit; color: inherit; }
 .arrow-btn:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
 .arrow-btn:disabled { opacity: .3; pointer-events: none; }
 .arrow-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.3; }
-.track { display: flex; align-items: flex-start; overscroll-behavior-x: contain; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; gap: clamp(20px, 3.5vw, 56px); overflow-x: auto; padding-inline: var(--gutter); scrollbar-width: none; cursor: grab; scroll-behavior: auto; }
+.track { display: flex; align-items: flex-start; overscroll-behavior-x: contain; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; gap: clamp(20px, 3.5vw, 56px); overflow-x: auto; padding-inline: var(--gutter); padding-block: 28px; margin-block: -28px; scrollbar-width: none; cursor: grab; scroll-behavior: auto; }
 .track::-webkit-scrollbar { display: none; }
 .track.dragging { cursor: grabbing; }
 .track.dragging a { pointer-events: none; }
@@ -131,7 +131,9 @@ button { font: inherit; color: inherit; }
 .slider-foot { display: flex; align-items: center; gap: 24px; margin-top: 48px; }
 .slider-foot .arrows { display: none; }
 @media (max-width: 767px) { .sec-head .arrows { display: none; } .slider-foot .arrows { display: flex; } }
-.art-hover { overflow: hidden; }
+.art-hover { overflow: visible; }
+.art-hover img, .hero-art a > img, .img > .enter-mask > img { filter: drop-shadow(0 14px 20px rgba(17,17,17,.20)) drop-shadow(0 3px 6px rgba(17,17,17,.12)); }
+.art-hover img[src*="pop-culture-explosion"], .hero-art a > img[src*="pop-culture-explosion"], .img > .enter-mask > img[src*="pop-culture-explosion"] { filter: none; }
 .art-hover img { transition: transform 1.4s var(--ease); }
 a:hover .art-hover img { transform: scale(1.025); }
 
