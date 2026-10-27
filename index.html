@@ -346,7 +346,14 @@ const italicLast = t => { const i = t.trim().lastIndexOf(" "); return i < 0 ? es
 const arrow = '<span class="arrow" aria-hidden="true">→</span>';
 const svgArrow = dir => `<svg viewBox="0 0 24 24" aria-hidden="true" ${dir === "prev" ? 'style="transform:rotate(180deg)"' : ""}><path d="M4 12h15M13 6l6 6-6 6"/></svg>`;
 
-const card = (w, i) => `<a class="card reveal" style="--d:${(i % 3) * 90}ms" href="#work-${w.slug}"><div class="art-hover" style="width:${w.size || 100}%">${img(w, "", true)}</div><span class="t"><span class="link-line">${esc(w.title)}</span></span>${w.dims ? `<span class="dim">${esc(w.dims.cm)}</span>` : ""}</a>`;
+const REAL_MAX = 200;
+const realPct = w => {
+  const n = ((w.dims && w.dims.cm) || "").match(/[\d.]+/g);
+  if (!n || n.length < 2 || !w.img) return 100;
+  const a = +n[0], b = +n[1], wide = w.img.w >= w.img.h;
+  return Math.max(32, Math.min(100, Math.round((wide ? Math.max(a, b) : Math.min(a, b)) / REAL_MAX * 100)));
+};
+const card = (w, i) => `<a class="card reveal" style="--d:${(i % 3) * 90}ms" href="#work-${w.slug}"><div class="art-hover" style="width:${realPct(w)}%">${img(w, "", true)}</div><span class="t"><span class="link-line">${esc(w.title)}</span></span>${w.dims ? `<span class="dim">${esc(w.dims.cm)}</span>` : ""}</a>`;
 
 function viewHome() {
   const h = DATA.home, hero = byId[h.heroArtwork] || W[0], red = byId[h.redArtwork] || hero;
@@ -426,8 +433,8 @@ function viewWork(slug) {
       <div class="info"><div class="enter" style="--d:200ms">
         <p class="label muted">Original painting</p><h1 class="display">${esc(w.title)}</h1>
         <dl class="facts">${rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
-        <div class="actions"><button class="btn btn-dark" data-enq="Enquire to acquire" data-art="${esc(w.title)}">Enquire to acquire ${arrow}</button><button class="btn btn-line" data-enq="Request details" data-art="${esc(w.title)}">Request details</button></div>
-        <p class="small">Pricing and availability are shared privately on request.</p>
+        ${w.archived ? "" : `<div class="actions"><button class="btn btn-dark" data-enq="Enquire to acquire" data-art="${esc(w.title)}">Enquire to acquire ${arrow}</button><button class="btn btn-line" data-enq="Request details" data-art="${esc(w.title)}">Request details</button></div>`}
+        ${w.archived ? "" : `<p class="small">Pricing and availability are shared privately on request.</p>`}
         ${w.desc ? `<div class="desc"><p class="label muted" style="margin-bottom:16px">The story</p><p class="story">${esc(w.desc)}</p></div>` : ""}
       </div></div>
     </div>
