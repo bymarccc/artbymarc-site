@@ -166,6 +166,9 @@ a:hover .art-hover img { transform: scale(1.025); }
 .grid { display: grid; grid-template-columns: 1fr; align-items: end; column-gap: clamp(20px, 3vw, 48px); row-gap: clamp(56px, 7vw, 112px); }
 @media (min-width: 640px) { .grid { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1100px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+.card { text-align: center; }
+.card .art-hover { margin-inline: auto; }
+.card .dim.dim-in { margin-top: 3px; font-size: 9.9px; }
 .card .dim { display: block; margin-top: 8px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted, #6f6a62); font-weight: 400; }
 .card .t { font-family: var(--serif); font-size: clamp(22px, 2vw, 24px); line-height: 1.15; margin-top: 20px; display: block; }
 
@@ -346,14 +349,14 @@ const italicLast = t => { const i = t.trim().lastIndexOf(" "); return i < 0 ? es
 const arrow = '<span class="arrow" aria-hidden="true">→</span>';
 const svgArrow = dir => `<svg viewBox="0 0 24 24" aria-hidden="true" ${dir === "prev" ? 'style="transform:rotate(180deg)"' : ""}><path d="M4 12h15M13 6l6 6-6 6"/></svg>`;
 
-const REAL_MAX = 200;
-const realPct = w => {
+const realEq = w => {
   const n = ((w.dims && w.dims.cm) || "").match(/[\d.]+/g);
-  if (!n || n.length < 2 || !w.img) return 100;
-  const a = +n[0], b = +n[1], wide = w.img.w >= w.img.h;
-  return Math.max(32, Math.min(100, Math.round((wide ? Math.max(a, b) : Math.min(a, b)) / REAL_MAX * 100)));
+  if (!n || n.length < 2 || !w.img) return 0;
+  return Math.sqrt(n[0] * n[1] * (w.img.w / w.img.h));
 };
-const card = (w, i) => `<a class="card reveal" style="--d:${(i % 3) * 90}ms" href="#work-${w.slug}"><div class="art-hover" style="width:${realPct(w)}%">${img(w, "", true)}</div><span class="t"><span class="link-line">${esc(w.title)}</span></span>${w.dims ? `<span class="dim">${esc(w.dims.cm)}</span>` : ""}</a>`;
+const REAL_MAX = Math.max(...ALL.map(realEq));
+const realPct = w => { const e = realEq(w); return e ? Math.max(32, Math.min(100, Math.round(e / REAL_MAX * 100))) : 100; };
+const card = (w, i) => `<a class="card reveal" style="--d:${(i % 3) * 90}ms" href="#work-${w.slug}"><div class="art-hover" style="width:${realPct(w)}%">${img(w, "", true)}</div><span class="t"><span class="link-line">${esc(w.title)}</span></span>${w.dims ? `<span class="dim">${esc(w.dims.cm)}</span>${w.dims.in ? `<span class="dim dim-in">${esc(w.dims.in)}</span>` : ""}` : ""}</a>`;
 
 function viewHome() {
   const h = DATA.home, hero = byId[h.heroArtwork] || W[0], red = byId[h.redArtwork] || hero;
